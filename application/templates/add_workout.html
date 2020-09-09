@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% block body_content %}
+<h1>Add Workout Here</h1>
+	<div class='form'>
+		<form method='POST' action=''>
+			{{ form.hidden_tag() }}
+            {{ form.first_name.label }}
+            <br>
+			{{ form.first_name }}
+            {% if form.first_name.errors  %}
+                <div class="error">
+                    {% for error in form.first_name.errors  %}
+				        <span>{{ error }}</span>
+                    {% endfor  %}
+                </div>
+			{% endif  %}
+            <br>
+            <br>
+            {{ form.last_name.label }}
+            <br>
+			{{ form.last_name }}
+            {% if form.last_name.errors  %}
+                <div class='error'></div> 
+				    {% for error in form.last_name.errors %}
+				        <span>{{ error }}</span>
+                    {% endfor  %}
+                </div> 
+			{% endif  %}
+            <br>
+            <br>
+            {{ form.exercise_name.label }}
+            <br>
+            {{ form.exercise_name }}
+            {% if form.exercise_name.errors %}
+                <div class='error'>
+                    {% for error in form.exercise_name.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <br>
+            <br>
+            {{ form.maximum_lift.label }}
+            <br>
+            {{ form.maximum_lift }}
+            {% if form.maximum_lift.errors %}
+                <div class='error'>
+                    {% for error in form.maximum_lift.errors %}
+                        <span>{[ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <br>
+            <br>
+            {{ form.notes.label }}
+            <br>
+            {{ form.notes }}
+            {% if form.notes.errors %}
+                <div class='error'>
+                    {% for error in form.notes.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <br>   
+            <br> 
+			{{ form.submit }}
+		</form>
+	</div>
+{% endblock  %}

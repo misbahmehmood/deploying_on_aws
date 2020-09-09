@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block body_content %}
+<h1>Workout log</h1>
+
+    <div>
+                <h2>Update your workout</h2>
+        <p><b> - First Name:</b>{{ post.first_name }}</p>
+		<p><b> - Last Name:</b>{{ post.last_name }}</p>
+        <p><b> - Exercise:</b>{{ post.exercise_name }}</p>
+        <p><b> - Best lift:</b>{{ post.maximum_lift }}kg</p>
+        <p><b> - Notes:</b>{{ post.notes }}</p>
+    </div>
+{% endblock %}

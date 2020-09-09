@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block body_content %}
+<h1>Workout Log</h1>
+{% for post in workout %}
+    <div>
+                <h2><a class='post-title' href='{{ url_for('post', post_id=post.id)}}'>Great Session {{ post.first_name}}!</a></h2>
+        <p><b> - First Name:</b>{{ post.first_name }}</p>
+		<p><b> - Last Name:</b>{{ post.last_name }}</p>
+        <p><b> - Exercise:</b>{{ post.exercises.exercise_name }}</p>
+        <p><b> - Best lift:</b>{{ post.maximum_lift }}kg</p>
+		<p><b> - Notes:</b>{{ post.notes }}</p>
+        
+    </div>
+{% endfor %}
+
+{% endblock %}
