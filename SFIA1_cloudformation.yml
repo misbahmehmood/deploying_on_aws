@@ -16,34 +16,12 @@ Resources:
   EC2Instance:
     Type: "AWS::EC2::Instance"
     Properties:
-      ImageId: "ami-04137ed1a354f54c4"
+      ImageId: "ami-0c5d439747971368d"
       InstanceType: "t2.micro"
       SecurityGroupIds:
       - !GetAtt InstanceSecurityGroup.GroupId
       KeyName: !Ref sfia1
       SubnetId: !Ref PublicSubnet1
-      UserData: 
-        Fn::Base64: 
-          !Sub |
-
-            #!/bin/bash
-            sudo apt update -y
-
-            sudo apt install -y software-properties-common
-            sudo apt-add-repository --yes --update ppa:ansible/ansible
-            sudo apt install -y ansible
-
-            sudo apt install openjdk-8-jdk -y 
-
-            wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-            sudo sh -c 'echo deb https://pkg.jenkins.io/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-            sudo apt-get update -y
-            sudo apt-get install jenkins -y
-
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            sudo apt install unzip -y
-            unzip awscliv2.zip
-            sudo ./aws/install
       Tags:
       - Key: Name
         Value: "SFIA-EC2" 
@@ -75,6 +53,21 @@ Resources:
         Description: "Allow port 5000"
         FromPort: "5000"
         ToPort: "5000"
+        IpProtocol: "tcp"
+      - CidrIp: "0.0.0.0/0"
+        Description: "Allow jenkins"
+        FromPort: "8080"
+        ToPort: "8080"
+        IpProtocol: "tcp"
+      - CidrIp: "0.0.0.0/0"
+        Description: "MySQL"
+        FromPort: "3306"
+        ToPort: "3306"
+        IpProtocol: "tcp"
+      - CidrIp: "0.0.0.0/0"
+        Description: "Allow http"
+        FromPort: "80"
+        ToPort: "80"
         IpProtocol: "tcp"
 
   InternetGateway:
