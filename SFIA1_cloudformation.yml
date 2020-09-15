@@ -5,7 +5,12 @@ Parameters:
     Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance"
     Type: "AWS::EC2::KeyPair::KeyName"
     ConstraintDescription: "must be the name of an existing EC2 KeyPair"
-
+  MUser:
+    Type: String
+  MPass:
+    Type: String
+    NoEcho: true
+  
 
 Resources:
   EC2Instance:
@@ -17,6 +22,28 @@ Resources:
       - !GetAtt InstanceSecurityGroup.GroupId
       KeyName: !Ref sfia1
       SubnetId: !Ref PublicSubnet1
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+
+            #!/bin/bash
+            sudo apt update -y
+
+            sudo apt install -y software-properties-common
+            sudo apt-add-repository --yes --update ppa:ansible/ansible
+            sudo apt install -y ansible
+
+            sudo apt install openjdk-8-jdk -y 
+
+            wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+            sudo sh -c 'echo deb https://pkg.jenkins.io/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+            sudo apt-get update -y
+            sudo apt-get install jenkins -y
+
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            sudo apt install unzip -y
+            unzip awscliv2.zip
+            sudo ./aws/install
       Tags:
       - Key: Name
         Value: "SFIA-EC2" 
@@ -28,7 +55,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
       - Key: Name
-        Value: myVPC
+        Value: "myVPC"
   
   InstanceSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
@@ -71,6 +98,7 @@ Resources:
       AvailabilityZone: !Select
         - '0'
         - !GetAZs ''
+      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: Public Subnet 1
@@ -141,8 +169,8 @@ Resources:
       DBInstanceClass: "db.t2.micro"
       Engine: "MySQL"
       Iops: "1000"
-      MasterUsername: ""
-      MasterUserPassword: ""
+      MasterUsername: !Ref MUser
+      MasterUserPassword: !Ref MPass
       DBSubnetGroupName: "dbsubnetgroup"
       Tags:
       - Key: Name
