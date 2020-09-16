@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+    app:
+        image: misbahmehmood/sfia1
+        build: ./application
+        ports:
+        - target: 5000
+          published: 5000
+          protocol: tcp
+        deploy:
+          replicas: 2
+        environment:
+            SFIA2_PROJECT_DB_URI: ${SFIA2_PROJECT_DB_URI}
+            SECRET_KEY: ${SECRET_KEY}
